@@ -12,7 +12,7 @@ shinyServer(function(input, output, session) {
   points <- eventReactive(input$Start, {
 	if(input$Month<=9){M=paste0("0",input$Month)}else{M=input$Month}
       
-      data = drop_read_csv(paste0("CrimesUK/CrimesUK",substr(paste(input$Year),0,4),"_",M,".csv"), dtoken=token)
+      data = drop_read_csv(paste0("CrimesUK/CrimesUK",substr(paste(input$Year),0,4),"_",M,".csv"), header=F, dtoken=token)
       
       data = data[data[,3]==paste(input$Crimes),]
       
