@@ -1,7 +1,6 @@
 shinyServer(function(input, output, session) {
-  #load(url("http://www.fabioveronesi.net/Blog/token.RDAta"))
   
-  token <- readRDS(url("http://www.fabioveronesi.net/Blog/token.rds"))
+  token <- readRDS("token.rds")
   
   output$mymap <- renderLeaflet({
     leaflet() %>% addProviderTiles(providers$Stamen.TonerLite,
