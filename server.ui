@@ -1,0 +1,55 @@
+shinyServer(function(input, output, session) {
+  #load(url("http://www.fabioveronesi.net/Blog/token.RDAta"))
+  
+  token <- readRDS(url("http://www.fabioveronesi.net/Blog/token.rds"))
+  
+  output$mymap <- renderLeaflet({
+    leaflet() %>% addProviderTiles(providers$Stamen.TonerLite,
+                                         options = providerTileOptions(noWrap = TRUE)
+    ) %>%
+      fitBounds(lng1=-11, lat1=50, lng2=1, lat2=57)
+  })
+
+  points <- eventReactive(input$Start, {
+	if(input$Month<=9){M=paste0("0",input$Month)}else{M=input$Month}
+      
+      data = drop_read_csv(paste0("CrimesUK/CrimesUK",substr(paste(input$Year),0,4),"_",M,".csv"), dtoken=token)
+      
+      data = data[data[,3]==paste(input$Crimes),]
+      
+      na.omit(cbind(data[,2], data[,1]))
+  }, ignoreNULL = FALSE)
+  
+  observeEvent(input$mymap_bounds, {
+    
+    BB = input$mymap_bounds
+    
+    #browser()
+    WDW = owin(yrange=c(BB$west, BB$east), xrange=c(BB$south, BB$north))
+    
+    Crimes_ppp <- ppp(x=points()[,2],
+                      y=points()[,1],
+                      window=WDW)
+    
+    R = quadrat.test(quadratcount(unique(Crimes_ppp), nx=4, ny=4), 
+                     alternative="clustered",
+                     method="MonteCarlo")
+    
+    output$Kest =  renderPlot({ 
+      plot(Kest(unique(Crimes_ppp), correction="good"), main="")
+    })
+    
+    output$Pvalue = renderText({
+      paste("Quadrat Test (Alt=Clustered). P-Value: ", round(R$p.value),4)
+      })
+    
+  })
+  
+
+  observe({
+    leafletProxy("mymap", data = points()) %>%
+      clearHeatmap()  %>%
+      addHeatmap(data = points(), radius=7)
+  })
+  
+})
