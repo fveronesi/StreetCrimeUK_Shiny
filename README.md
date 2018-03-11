@@ -28,3 +28,14 @@ for(i in lista){
 Here I first create a list of all csv files, with full link, searching inside all sub directory. Then I started a `for` loop to iterate through the files. The loop simply loads each file and than save part of its contents (namely coordinates and crime type) into new csv named after using year and month. This will help me identify which files to download from Dropbox, based on user inputs.
 
 Once I had these files I simply uploded them to my Dropbox.
+
+## Deployment to Shinyapps.io
+To deploy the app on shinyapps.io I simply followed the instructions provided.
+
+The link to test the app is:
+
+### [fveronesi.shinyapps.io/CrimeUK](https://fveronesi.shinyapps.io/CrimeUK/)
+
+A snapshot of the screen is below:
+
+![]()
