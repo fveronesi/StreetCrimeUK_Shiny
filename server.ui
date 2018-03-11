@@ -39,7 +39,7 @@ shinyServer(function(input, output, session) {
     })
     
     output$Pvalue = renderText({
-      paste("Quadrat Test (Alt=Clustered). P-Value: ", round(R$p.value),4)
+      paste("Quadrat Test (Alt=Clustered). P-Value: ", round(R$p.value,4))
       })
     
   })
